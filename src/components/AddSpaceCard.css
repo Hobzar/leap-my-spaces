@@ -1,0 +1,53 @@
+/* Same size and shape as a room card. It only ever peeks in beside the last room, so
+   the plus is centered in that visible part rather than in the whole card. */
+.add-space {
+  --peek-width: calc((100vw - var(--card-width)) / 2 - var(--card-gap));
+
+  position: relative;
+  flex: 0 0 var(--card-width);
+  padding: 0;
+  color: var(--add-space-fg);
+  background: var(--add-space-bg);
+  border: 0;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 150ms ease-out;
+}
+
+/* On phones the peek is narrow, so the gap beside it also counts as the tap target. */
+.add-space::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 calc(var(--card-gap) * -1);
+  width: var(--card-gap);
+}
+
+.add-space__icon {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--peek-width) / 2);
+  width: clamp(14px, 3.2vw, 44px);
+  height: clamp(14px, 3.2vw, 44px);
+  transform: translate(-50%, -50%);
+}
+
+@media (hover: hover) {
+  .add-space:hover {
+    background: var(--add-space-hover-bg);
+  }
+}
+
+.add-space:active {
+  background: var(--add-space-hover-bg);
+}
+
+.add-space:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .add-space {
+    transition: none;
+  }
+}

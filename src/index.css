@@ -1,0 +1,50 @@
+:root {
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+
+  --gallery-bg-top: #464c51;
+  --gallery-bg-bottom: #4f585f;
+  --gallery-fg: #e3e5e7;
+  --neighbor-veil: rgb(255 255 255 / 0.3);
+
+  --add-space-bg: rgb(0 0 0 / 0.22);
+  --add-space-hover-bg: rgb(0 0 0 / 0.32);
+  --add-space-fg: #a3adb8;
+
+  --toolbar-bg: rgb(46 50 54 / 0.55);
+  --button-bg: rgb(0 0 0 / 0.33);
+  --button-fg: #e8e9eb;
+  --button-disabled-fg: rgb(232 233 235 / 0.65);
+  --button-hover-bg: #d1d4de;
+  --button-hover-fg: #4a4f54;
+  --button-primary-hover-bg: #e4e6ee;
+  --button-pressed-bg: #b9bdc9;
+  --done-disabled-bg: rgb(0 0 0 / 0.15);
+  --done-disabled-fg: rgb(232 233 235 / 0.45);
+
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Buttons have their own pressed state, so drop the browser's tap flash. */
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  height: 100%;
+}
+
+/* The gallery background lives here, so it's already behind a room as it shrinks or expands. */
+body {
+  min-height: 100%;
+  margin: 0;
+  overscroll-behavior: none;
+  background: linear-gradient(var(--gallery-bg-top), var(--gallery-bg-bottom));
+}

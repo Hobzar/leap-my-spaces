@@ -1,0 +1,176 @@
+/* Measured from references/02-enter-spaces.png at 1395px wide: the card is 80% of
+   the viewport in both directions, so it keeps the shape of the full-screen room. */
+.spaces {
+  --card-width: 80vw;
+  --card-gap: max(12px, 4.7vw);
+
+  position: fixed;
+  inset: 0;
+  display: grid;
+  /* minmax(0, 1fr) keeps the column at viewport width despite the wide track. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(60px, 10dvh) minmax(0, 1fr) minmax(min-content, 10dvh);
+  /* clip, not hidden: hidden would still let focus scroll the track sideways. */
+  overflow: clip;
+}
+
+/* Rests the track on the selected room. Motion's x is only a temporary offset on top. */
+.spaces__viewport {
+  position: relative;
+  z-index: 1;
+  grid-column: 1;
+  grid-row: 2;
+  min-height: 0;
+  transform: translateX(calc(var(--selected-index) * -1 * (var(--card-width) + var(--card-gap))));
+}
+
+.spaces__track {
+  display: flex;
+  gap: var(--card-gap);
+  /* max-content so the gaps between far cards can also start a drag. */
+  width: max-content;
+  height: 100%;
+  padding-inline: calc((100vw - var(--card-width)) / 2);
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+}
+
+.spaces__track[data-phase='dragging'],
+.spaces__track[data-phase='dragging'] .spaces__card {
+  cursor: grabbing;
+}
+
+.spaces__card {
+  position: relative;
+  flex: 0 0 var(--card-width);
+  padding: 0;
+  overflow: hidden;
+  background: var(--toolbar-bg);
+  border: 0;
+  box-shadow: 0 0 60px rgb(0 0 0 / 0.25);
+  cursor: pointer;
+}
+
+/* Washes out neighbours. It sits over the image so it never competes with the blur. */
+.spaces__card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--neighbor-veil);
+  pointer-events: none;
+  transition: opacity 250ms ease-out;
+}
+
+.spaces__card[aria-current='true'] {
+  z-index: 1;
+  cursor: inherit;
+}
+
+.spaces__card[aria-current='true']::after {
+  opacity: 0;
+}
+
+.spaces__card:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.spaces__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 150ms ease-out;
+}
+
+.spaces__track:not([data-phase='idle']) .spaces__image {
+  filter: blur(8px);
+}
+
+.spaces__details {
+  grid-column: 1;
+  grid-row: 3;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  width: var(--card-width);
+  padding: 8px 35px max(8px, env(safe-area-inset-bottom)) 29px;
+  color: var(--gallery-fg);
+}
+
+.spaces__info {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.spaces__name {
+  margin: 0 0 6px;
+  overflow: hidden;
+  font-size: 9.5px;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.spaces__materials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 31px;
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.spaces__actions {
+  display: flex;
+  flex: none;
+  gap: 6px;
+}
+
+.spaces__actions .action-button {
+  padding-inline: 14px;
+}
+
+/* Phones: the details span the full width and stack, with room for all three buttons. */
+@media (max-width: 640px) {
+  .spaces__details {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding-inline: 16px;
+  }
+
+  .spaces__info {
+    flex: none;
+  }
+
+  .spaces__name {
+    font-size: 11px;
+  }
+
+  .spaces__materials {
+    font-size: 12px;
+  }
+
+  .spaces__actions .action-button {
+    flex: 1;
+    padding-inline: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spaces__card::after,
+  .spaces__image {
+    transition: none;
+  }
+
+  .spaces__track:not([data-phase='idle']) .spaces__image {
+    filter: none;
+  }
+}

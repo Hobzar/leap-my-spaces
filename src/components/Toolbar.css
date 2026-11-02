@@ -1,0 +1,25 @@
+/* Sits flush with the top edge. Colors are translucent so the bar picks up the
+   tint of the room behind it, as in references/01-visualizer.png. */
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  display: flex;
+  gap: 6px;
+  padding: max(5px, env(safe-area-inset-top)) 6px 6px;
+  background: var(--toolbar-bg);
+  border-radius: 0 0 11px 11px;
+  backdrop-filter: blur(12px);
+  transform: translateX(-50%);
+}
+
+.toolbar--spaces .action-button {
+  padding-inline: 17px;
+}
+
+/* Done while the carousel moves, as in references/03-swipe-spaces.png. */
+.toolbar--spaces .action-button:disabled {
+  color: var(--done-disabled-fg);
+  background: var(--done-disabled-bg);
+}
